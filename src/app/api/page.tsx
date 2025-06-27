@@ -1,23 +1,27 @@
+import { NextResponse } from "next/server";
 import clientPromise from "../../../lib/mongodb";
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async () => {
+
     try {
 
         const client = await clientPromise;
         
-        const db = client.db("sample_mflix");
+        const db = client.db("groclog");
 
         const movies = await db
-            .collection("movies")
+            .collection("Entries")
             .find({})
             .limit(10)
             .toArray();
-
-        return movies.toLocaleString
+        console.log(movies);
+        // return NextResponse.json({ message: "Hello - GET" }, { status: 200 });
+        return movies[0].time
 
     } catch (e) {
         console.error(e);
     }
 
 }
+
