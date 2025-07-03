@@ -4,10 +4,15 @@ import mongoclient from "../../lib/mongodb";
 export const dynamic = "force-dynamic"; 
 export const fetchCache = 'force-no-store';
 
-// interface movie {
-//    _id: string;
-//    time: string;
-// }
+import {
+    Table,
+    TableBody,
+    TableCaption,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+  } from "@/components/ui/table"
 
 const ListAll = async () => {
    try {
@@ -20,31 +25,38 @@ const ListAll = async () => {
            .toArray();
 
        return (
-           <>
-               
-                   {movies.map(movie =>
-                       
-                       <tr key={movie.time } className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                           <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                           {movie.time}
-                           </th>
-                           <td className="px-6 py-4">
-                           {movie.time}
-                           </td>
-                           <td className="px-6 py-4">
-                           {movie.time}
-                           </td>
-                           <td className="px-6 py-4">
-                           {movie.time}
-                           </td>
-                       </tr>
-)}
+           <>  
+               <Table>
+                <TableCaption>Grocery Store Entries</TableCaption>
+                <TableHeader>
+                    <TableRow>
+                    <TableHead className="w-[100px]">Items</TableHead>
+                    <TableHead>Store</TableHead>
+                    <TableHead>Time</TableHead>
+                    <TableHead className="text-right">Amount</TableHead>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                       {movies.map(movie =>
+                           <TableRow key={movie.time}>
+                               <TableCell className="font-medium">{movie.time}</TableCell>
+                           <TableCell>{movie.time}</TableCell>
+                           <TableCell>{movie.time}</TableCell>
+                           <TableCell className="text-right">{movie.time}</TableCell>
+                           </TableRow>
+                       )}
+                </TableBody>
+                </Table>
             </>
        );
 
    } catch (e) {
        console.error(e);
-       return { props: { movies: [] } };
+       return (
+           <>
+               <h1>Loading</h1>
+           </>
+       );
    }
 
 };
