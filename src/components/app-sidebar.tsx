@@ -25,7 +25,7 @@ const data = {
       items: [
         {
           title: "Upload",
-          url: "#",
+          url: "upload",
         },
       ],
     },
