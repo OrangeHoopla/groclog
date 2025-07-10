@@ -3,7 +3,8 @@ import { revalidatePath } from "next/cache";
 import fs from "node:fs/promises";
 
 export async function POST(req: Request) {
-  try {
+    try {
+        console.log("terminal response");
     const formData = await req.formData();
     const file = formData.get("file") as File;
     const arrayBuffer = await file.arrayBuffer();

@@ -15,14 +15,14 @@ export default function UploadForm() {
     evt.preventDefault();
     var formdata = new FormData();
     formdata.append("file", fileInput?.current?.files?.[0]!);
-    await fetch("/api/uploadImage", { method: "POST", body: formdata });
+    await fetch("/api/", { method: "POST", body: formdata });
     router.refresh();
   }
 
   return (
     <form
       method="POST"
-      action="/api/uploadImage"
+      action="/api/"
       className="flex flex-col gap-4"
     >
       <label>
