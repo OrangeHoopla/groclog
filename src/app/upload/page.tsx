@@ -13,8 +13,10 @@ export default function UploadForm() {
     evt: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) {
     evt.preventDefault();
-    var formdata = new FormData();
-    formdata.append("file", fileInput?.current?.files?.[0]!);
+    const formdata = new FormData();
+    const hmm = fileInput.current?.files || null
+    const res = hmm?.[0] || null
+    formdata.append("file", res!);
     await fetch("/api/", { method: "POST", body: formdata });
     router.refresh();
   }

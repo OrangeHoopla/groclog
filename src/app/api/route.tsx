@@ -1,13 +1,11 @@
 import { NextResponse } from "next/server";
-import { revalidatePath } from "next/cache";
-import fs from "node:fs/promises";
 
-const uri = process.env.BACKEND_URI;
+// const uri = process.env.BACKEND_URI;
 
 export async function POST(req: Request) {
     try {
     const formData = await req.formData();
-    const file = formData.get("file") as File;
+    // const file = formData.get("file") as File;
     
     const example = await fetch("http://localhost:8000/api/upload", {
             method: "post",
