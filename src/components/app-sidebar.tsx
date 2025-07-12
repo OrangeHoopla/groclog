@@ -30,7 +30,7 @@ const data = {
       ],
     },
     {
-      title: "Metrics",
+      title: "Data",
       url: "#",
       items: [
         {
@@ -38,7 +38,7 @@ const data = {
           url: "#",
         },
         {
-          title: "Finances",
+          title: "Metrics",
           url: "#",
           isActive: true,
         },
@@ -47,9 +47,9 @@ const data = {
   ],
 }
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar(props: { active: string } ) {
   return (
-    <Sidebar {...props}>
+    <Sidebar>
       <SidebarHeader>
         {/* <VersionSwitcher
           versions={data.versions}
@@ -66,7 +66,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               <SidebarMenu>
                 {item.items.map((item) => (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild isActive={item.isActive}>
+                    <SidebarMenuButton asChild isActive={item.title === props.active}>
                       <a href={item.url}>{item.title}</a>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
