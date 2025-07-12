@@ -1,16 +1,21 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useRef } from "react";
-
-// import { uploadFile } from "./upload-action";
+import { useState } from "react";
+import Image from 'next/image'
 
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/app-sidebar";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
 
 export default function InputFile() {
   const fileInput = useRef<HTMLInputElement>(null);
   const router = useRouter();
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
 
   async function uploadFile(
     evt: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -20,16 +25,95 @@ export default function InputFile() {
     const hmm = fileInput.current?.files || null
     const res = hmm?.[0] || null
     formdata.append("file", res!);
-    await fetch("/api/", { method: "POST", body: formdata });
+
+    await fetch("/api/", { method: "POST", body: formdata }).then((response) => {
+      console.log(response);
+      response.json().then((data) => {
+
+        console.log(data.response);
+        const myElement: HTMLElement = document.getElementById('p1')!;
+        myElement.innerHTML = data.response.raw_text;
+        
+      });
+  });
+
     router.refresh();
+
   }
 
-  return (
-    <div className="grid w-full max-w-sm items-center gap-3">
-      <Label htmlFor="picture">Picture</Label>
-      <Input id="picture" type="file" ref={fileInput} />
-      <Button onClick={uploadFile}>Submit</Button>
-    </div>
+  const handleImageUpload = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    if (evt.target.files != null) {
+      setSelectedImage(evt.target.files[0]); //error
+    }
+  };
+
+
+  return (<SidebarProvider>
+    <AppSidebar/>
+    <SidebarInset>
+      <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
+        <SidebarTrigger className="-ml-1" />
+        <Separator
+          orientation="vertical"
+          className="mr-2 data-[orientation=vertical]:h-4"
+        />
+        {/* <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem className="hidden md:block">
+              <BreadcrumbLink href="#">
+                Building Your Application
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator className="hidden md:block" />
+            <BreadcrumbItem>
+              <BreadcrumbPage>Data Fetching</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb> */}
+      </header>
+      <div className="flex flex-1 flex-col gap-4 p-4">
+        <div className="grid auto-rows-min gap-4 md:grid-cols-3">
+          <div className="bg-muted/50 aspect-video rounded-xl">
+            <div className="grid w-full max-w-sm items-center gap-3">
+              {selectedImage && (
+                <Image width={500} height={500}
+                  src={URL.createObjectURL(selectedImage)}
+                  
+                  alt="Thumb"
+                />
+              )}
+            </div>
+          </div>
+          <div >
+            <Card className="w-full max-w-sm">
+                <CardContent>
+                  <form>
+                    <div className="flex flex-col gap-6">
+                      <div className="grid gap-2">
+                        <Label htmlFor="email">Upload Photo</Label>
+                        <Input id="picture"
+                          type="file"
+                          ref={fileInput}
+                          onChange={handleImageUpload}
+                        />
+                      </div>
+                    </div>
+                  </form>
+                </CardContent>
+                <CardFooter className="flex-col gap-2">
+                <Button onClick={uploadFile}>Submit</Button>
+                </CardFooter>
+              </Card>
+          </div>
+          <div className="bg-muted/50 aspect-video rounded-xl">
+            <p id="p1"></p>
+
+          </div>
+        </div>
+      </div>
+    </SidebarInset>
+  </SidebarProvider>
+  
   )
 }
 
