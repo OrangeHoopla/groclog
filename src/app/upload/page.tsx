@@ -28,12 +28,12 @@ export default function InputFile() {
     formdata.append("file", res!);
 
     await fetch("/api/", { method: "POST", body: formdata }).then((response) => {
-      console.log(response);
+      
       response.json().then((data) => {
 
         console.log(data.response);
         const myElement: HTMLElement = document.getElementById('p1')!;
-        myElement.innerHTML = data.response.raw_text;
+        myElement.innerHTML = JSON.stringify(data.response);
         
       });
   });
@@ -78,8 +78,7 @@ export default function InputFile() {
             <div className="grid w-full max-w-sm items-center gap-3">
               {selectedImage && (
                 <Image width={500} height={500}
-                  src={URL.createObjectURL(selectedImage)}
-                  
+                  src={URL.createObjectURL(selectedImage)}   
                   alt="Thumb"
                 />
               )}
