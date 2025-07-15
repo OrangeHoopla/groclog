@@ -1,7 +1,5 @@
 'use server'
 import { NextResponse } from "next/server";
-export const dynamic = "force-dynamic"; 
-export const fetchCache = 'force-no-store';
 // const uri = process.env.BACKEND_URI;
 
 export async function POST(req: Request) {

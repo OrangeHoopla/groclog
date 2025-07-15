@@ -13,6 +13,8 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 import { Reciept } from "../api/reciept/route";
+export const dynamic = "force-dynamic"; 
+export const fetchCache = 'force-no-store';
 
 let reciept: Reciept;
 export default function InputFile() {
