@@ -1,5 +1,5 @@
+"use client"
 import { AppSidebar } from "@/components/app-sidebar"
-import { DatePickerDemo } from "@/components/date-picker"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -14,8 +14,30 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
+import * as React from "react"
+import { format } from "date-fns"
+import { Calendar as CalendarIcon } from "lucide-react"
+ 
+import { Button } from "@/components/ui/button"
+import { Calendar } from "@/components/ui/calendar"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 
 export default function Page() {
+  const [date, setDate] = React.useState<Date>()
+
+  async function uploadFile() {
+    console.log(date);
+
+    console.log("-------------------");
+    const demo = new Date("2025-07-13T03:00:17.120939Z");
+    setDate(demo);
+
+  }
+
   return (
     <SidebarProvider>
       <AppSidebar active={"Dashboard"} />
@@ -44,10 +66,28 @@ export default function Page() {
           <div className="grid auto-rows-min gap-4 md:grid-cols-3">
             <div className="bg-muted/50 aspect-video rounded-xl" />
             <div className="bg-muted/50 aspect-video rounded-xl" />
-            <div className="bg-muted/50 aspect-video rounded-xl" />
+            <div className="bg-muted/50 aspect-video rounded-xl">
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  data-empty={!date}
+                  className="data-[empty=true]:text-muted-foreground w-[280px] justify-start text-left font-normal"
+                >
+                  <CalendarIcon />
+                  {date ? format(date, "PPP") : <span>Pick a date</span>}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0">
+                <Calendar mode="single" selected={date} onSelect={setDate} />
+              </PopoverContent>
+            </Popover>
+
+            <Button onClick={uploadFile}>Press Me</Button>  
+            </div>
           </div>
           <div className="bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min" />
-          <DatePickerDemo/>
+          
         </div>
       </SidebarInset>
     </SidebarProvider>

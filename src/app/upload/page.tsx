@@ -12,12 +12,14 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
+import { Reciept } from "../api/reciept/route";
 
+let reciept: Reciept;
 export default function InputFile() {
+
   const fileInput = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
-
   async function uploadFile(
     evt: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) {
@@ -31,15 +33,20 @@ export default function InputFile() {
       
       response.json().then((data) => {
 
-        console.log(data.response);
+        // console.log(data);
         const myElement: HTMLElement = document.getElementById('p1')!;
         myElement.innerHTML = JSON.stringify(data.response);
+        reciept = data.response;
+        console.log(reciept)
         
       });
   });
-
     router.refresh();
 
+  }
+
+  async function submitReciept() {
+    await fetch("/api/reciept/", { method: "POST", body: JSON.stringify(reciept) })
   }
 
   const handleImageUpload = (evt: React.ChangeEvent<HTMLInputElement>) => {
@@ -102,6 +109,7 @@ export default function InputFile() {
                 </CardContent>
                 <CardFooter className="flex-col gap-2">
                 <Button onClick={uploadFile}>Submit</Button>
+                <Button onClick={submitReciept}>Submit Completed Form</Button>
                 </CardFooter>
               </Card>
           </div>
