@@ -13,15 +13,34 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 import { Reciept } from "../api/reciept/route";
+import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 export const dynamic = "force-dynamic"; 
 export const fetchCache = 'force-no-store';
 
-let reciept: Reciept;
-export default function InputFile() {
+
+
+const reciept_form = () => (
+  <div id="results" className="search-results">
+    Some Results
+  </div>
+)
+
+var reciept: Reciept;
+export default function InputFile(this: any) {
 
   const fileInput = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [showResults, setShowResults] = useState(false);
+  const [InputValue, setInputValue] = useState();
+
+  const handleChange = (event) => {
+    console.log(event.target.value);
+    const value = event.target.value;
+    setInputValue(value);
+  };
+
+  
   async function uploadFile(
     evt: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) {
@@ -36,10 +55,14 @@ export default function InputFile() {
       response.json().then((data) => {
 
         // console.log(data);
-        const myElement: HTMLElement = document.getElementById('p1')!;
-        myElement.innerHTML = JSON.stringify(data.response);
+        // const myElement: HTMLElement = document.getElementById('p1')!;
+        // myElement.innerHTML = JSON.stringify(data.response);
         reciept = data.response;
-        console.log(reciept)
+        setShowResults(true);
+        console.log(typeof reciept.items);
+        console.log(typeof reciept.items);
+        
+        // setShowResults(true);
         
       });
   });
@@ -49,6 +72,7 @@ export default function InputFile() {
 
   async function submitReciept() {
     await fetch("/api/reciept/", { method: "POST", body: JSON.stringify(reciept) })
+    setShowResults(false);
   }
 
   const handleImageUpload = (evt: React.ChangeEvent<HTMLInputElement>) => {
@@ -85,15 +109,6 @@ export default function InputFile() {
         <div className="grid auto-rows-min gap-4 md:grid-cols-3">
           <div className="bg-muted/50 aspect-video rounded-xl">
             <div className="grid w-full max-w-sm items-center gap-3">
-              {selectedImage && (
-                <Image width={500} height={500}
-                  src={URL.createObjectURL(selectedImage)}   
-                  alt="Thumb"
-                />
-              )}
-            </div>
-          </div>
-          <div >
             <Card className="w-full max-w-sm">
                 <CardContent>
                   <form>
@@ -114,9 +129,53 @@ export default function InputFile() {
                 <Button onClick={submitReciept}>Submit Completed Form</Button>
                 </CardFooter>
               </Card>
+            </div>
+          </div>
+          <div >
+          {selectedImage && (
+                <Image width={500} height={500}
+                  src={URL.createObjectURL(selectedImage)}   
+                  alt="Thumb"
+                />
+              )}
           </div>
           <div className="bg-muted/50 aspect-video rounded-xl">
-            <p id="p1"></p>
+            {showResults && (
+              <>
+                <Input type="text" onChange={handleChange} defaultValue={reciept.store} />
+                <Input type="text" onChange={handleChange} defaultValue={reciept.address}/>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="text-left">Name</TableHead>
+                      <TableHead className="text-right">Amount</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    
+                    {/* {reciept.items.map((item) => (
+                      <TableRow key={Math.random()}>
+                        <TableCell className="font-medium">
+                          <Input type="text" value={item[0]} />
+                        </TableCell>
+                        <TableCell className="font-medium">
+                        <Input type="number" value={item[1]}/>
+                        </TableCell>
+
+                      </TableRow>
+                    ))} */}
+                   
+                  </TableBody>
+                  <TableFooter>
+                    <TableRow>
+                      <TableCell colSpan={3}>Total</TableCell>
+                      <TableCell className="text-right">$2,500.00</TableCell>
+                    </TableRow>
+                  </TableFooter>
+                </Table>
+                <Button onClick={submitReciept}>Submit Completed Form</Button></>
+            )}
+              {/* <p id="p1"></p> */}
 
           </div>
         </div>
@@ -126,37 +185,3 @@ export default function InputFile() {
   
   )
 }
-
-// export default function UploadForm() {
-//   const fileInput = useRef<HTMLInputElement>(null);
-
-//   const router = useRouter();
-
-//   async function uploadFile(
-//     evt: React.MouseEvent<HTMLButtonElement, MouseEvent>
-//   ) {
-//     evt.preventDefault();
-//     const formdata = new FormData();
-//     const hmm = fileInput.current?.files || null
-//     const res = hmm?.[0] || null
-//     formdata.append("file", res!);
-//     await fetch("/api/", { method: "POST", body: formdata });
-//     router.refresh();
-//   }
-
-//   return (
-//     <form
-//       method="POST"
-//       action="/api/"
-//       className="flex flex-col gap-4"
-//     >
-//       <label>
-//         <span>Upload a file Now</span>
-//         <input type="file" name="file" ref={fileInput} />
-//       </label>
-//       <button type="submit" onClick={uploadFile}>
-//         Submit
-//       </button>
-//     </form>
-//   );
-// }

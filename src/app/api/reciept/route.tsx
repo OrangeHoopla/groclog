@@ -8,7 +8,7 @@ export interface item {
 }
 export interface Reciept {
   _id: string;
-  tore: string,
+  store: string,
   address: string,
   items: Array<item>,
   total: number,
