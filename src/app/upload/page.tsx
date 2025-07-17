@@ -68,6 +68,7 @@ export default function InputFile(this: any) {
       response.json().then((data) => {
 
         reciept = data.response;
+        // console.log(reciept);
         setAddress(reciept.address);
         setGoDate(reciept.transaction_date);
         setTotal(reciept.total);
@@ -167,11 +168,11 @@ export default function InputFile(this: any) {
                     {reciept.items.map((item, index) => (
                       <TableRow key={index}>
                         <TableCell className="font-medium">
-                          <Input type="text" onChange={() => handleItem(event, index)} defaultValue={item[0]}/>
+                          <Input type="text" onChange={() => handleItem(event, index)} defaultValue={item.name}/>
 
                         </TableCell>
                         <TableCell className="font-medium">
-                        <Input type="number" defaultValue={item[1]}/>
+                        <Input type="number" defaultValue={item.cost}/>
                         </TableCell>
 
                       </TableRow>
