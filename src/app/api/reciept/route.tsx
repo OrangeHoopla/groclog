@@ -2,7 +2,7 @@
 import { NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
 
-export interface item {
+export interface Item {
   name: string;
   cost: number;
 }
@@ -10,7 +10,7 @@ export interface Reciept {
   _id: string;
   store: string,
   address: string,
-  items: Array<item>,
+  items: Array<Item>,
   total: number,
   created: Date,
   updated: Date,

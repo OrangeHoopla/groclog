@@ -1,6 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { useRef } from "react";
+import { createRef, useRef } from "react";
 import { useState } from "react";
 import Image from 'next/image'
 
@@ -27,17 +27,30 @@ const reciept_form = () => (
 
 var reciept: Reciept;
 export default function InputFile(this: any) {
-
+  // var reciept = ({} as any) as Reciept;
   const fileInput = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [showResults, setShowResults] = useState(false);
-  const [InputValue, setInputValue] = useState();
+  const [address, setAddress] = useState<string>();
+  const [store, setStore] = useState<string>();
+  const [transdate, setGoDate] = useState<Date>();
+  const [total, setTotal] = useState<number>();
 
-  const handleChange = (event) => {
-    console.log(event.target.value);
+  const handleAddress = (event: { target: { value: string; }; }) => {
     const value = event.target.value;
-    setInputValue(value);
+    setAddress(value);
+  };
+
+  const handleStore = (event: { target: { value: string; }; }) => {
+    const value = event.target.value;
+    setStore(value);
+  };
+
+  const handleItem = (event: any, index: number) => {
+    reciept.items[index] = { "name": event.target.value, "cost": 0 };
+    console.log(reciept.items[index].name);
+    console.log(reciept);
   };
 
   
@@ -54,15 +67,11 @@ export default function InputFile(this: any) {
       
       response.json().then((data) => {
 
-        // console.log(data);
-        // const myElement: HTMLElement = document.getElementById('p1')!;
-        // myElement.innerHTML = JSON.stringify(data.response);
         reciept = data.response;
+        setAddress(reciept.address);
+        setGoDate(reciept.transaction_date);
+        setTotal(reciept.total);
         setShowResults(true);
-        console.log(typeof reciept.items);
-        console.log(typeof reciept.items);
-        
-        // setShowResults(true);
         
       });
   });
@@ -71,6 +80,8 @@ export default function InputFile(this: any) {
   }
 
   async function submitReciept() {
+    reciept.address = address!;
+    reciept.store = store!;
     await fetch("/api/reciept/", { method: "POST", body: JSON.stringify(reciept) })
     setShowResults(false);
   }
@@ -142,8 +153,8 @@ export default function InputFile(this: any) {
           <div className="bg-muted/50 aspect-video rounded-xl">
             {showResults && (
               <>
-                <Input type="text" onChange={handleChange} defaultValue={reciept.store} />
-                <Input type="text" onChange={handleChange} defaultValue={reciept.address}/>
+                <Input type="text" onChange={handleStore} defaultValue={reciept.store} />
+                <Input type="text" onChange={handleAddress} defaultValue={reciept.address}/>
                 <Table>
                   <TableHeader>
                     <TableRow>
@@ -153,23 +164,24 @@ export default function InputFile(this: any) {
                   </TableHeader>
                   <TableBody>
                     
-                    {/* {reciept.items.map((item) => (
-                      <TableRow key={Math.random()}>
+                    {reciept.items.map((item, index) => (
+                      <TableRow key={index}>
                         <TableCell className="font-medium">
-                          <Input type="text" value={item[0]} />
+                          <Input type="text" onChange={() => handleItem(event, index)} defaultValue={item[0]}/>
+
                         </TableCell>
                         <TableCell className="font-medium">
-                        <Input type="number" value={item[1]}/>
+                        <Input type="number" defaultValue={item[1]}/>
                         </TableCell>
 
                       </TableRow>
-                    ))} */}
+                    ))}
                    
                   </TableBody>
                   <TableFooter>
                     <TableRow>
                       <TableCell colSpan={3}>Total</TableCell>
-                      <TableCell className="text-right">$2,500.00</TableCell>
+                      <TableCell className="text-right">{reciept.total}</TableCell>
                     </TableRow>
                   </TableFooter>
                 </Table>
