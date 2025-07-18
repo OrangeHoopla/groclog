@@ -1,6 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { createRef, useRef } from "react";
+import { useRef } from "react";
 import { useState } from "react";
 import Image from 'next/image'
 
@@ -18,40 +18,40 @@ export const dynamic = "force-dynamic";
 export const fetchCache = 'force-no-store';
 
 
-
-const reciept_form = () => (
-  <div id="results" className="search-results">
-    Some Results
-  </div>
-)
-
-var reciept: Reciept;
-export default function InputFile(this: any) {
+let reciept: Reciept = ({"items": [],"store": "", "address":"","total":0,"created":new Date(),"updated":new Date(),"transaction_date":new Date(),"_id": ""});
+export default function InputFile() {
   // var reciept = ({} as any) as Reciept;
   const fileInput = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  const [showResults, setShowResults] = useState(false);
-  const [address, setAddress] = useState<string>();
-  const [store, setStore] = useState<string>();
-  const [transdate, setGoDate] = useState<Date>();
-  const [total, setTotal] = useState<number>();
 
   const handleAddress = (event: { target: { value: string; }; }) => {
-    const value = event.target.value;
-    setAddress(value);
+    reciept.address = event.target.value;
   };
 
-  const handleStore = (event: { target: { value: string; }; }) => {
-    const value = event.target.value;
-    setStore(value);
+  const handleStore = (event: { target: { value: string }; }) => {
+    reciept.store = event.target.value;
   };
 
-  const handleItem = (event: any, index: number) => {
-    reciept.items[index] = { "name": event.target.value, "cost": 0 };
-    console.log(reciept.items[index].name);
+  const handleTotal = (event: { target: { value: string } }) => {
+    reciept.total = Number(event.target.value);
     console.log(reciept);
   };
+
+  const handleItem = (event: { target: { value: string } }, index: number) => {
+    reciept.items[index].name = event.target.value;
+  };
+
+  const handleCost = (event: { target: { value: string } }, index: number) => {
+    reciept.items[index].cost = Number(event.target.value);
+  };
+
+  const handleTransactionTime = (event: { target: { value: string; }; }) => {
+    reciept.transaction_date = new Date(event.target.value);
+    console.log(reciept);
+  };
+
+  
 
   
   async function uploadFile(
@@ -66,13 +66,9 @@ export default function InputFile(this: any) {
     await fetch("/api/", { method: "POST", body: formdata }).then((response) => {
       
       response.json().then((data) => {
-
         reciept = data.response;
-        // console.log(reciept);
-        setAddress(reciept.address);
-        setGoDate(reciept.transaction_date);
-        setTotal(reciept.total);
-        setShowResults(true);
+        console.log(reciept);
+        
         
       });
   });
@@ -81,10 +77,8 @@ export default function InputFile(this: any) {
   }
 
   async function submitReciept() {
-    reciept.address = address!;
-    reciept.store = store!;
     await fetch("/api/reciept/", { method: "POST", body: JSON.stringify(reciept) })
-    setShowResults(false);
+    
   }
 
   const handleImageUpload = (evt: React.ChangeEvent<HTMLInputElement>) => {
@@ -137,13 +131,34 @@ export default function InputFile(this: any) {
                   </form>
                 </CardContent>
                 <CardFooter className="flex-col gap-2">
-                <Button onClick={uploadFile}>Submit</Button>
+                <Button onClick={uploadFile}>Upload Image</Button>
+                </CardFooter>
+              </Card>
+              <Card className="w-full max-w-sm">
+                <CardContent>
+                <div className="grid gap-3">
+                  <Label htmlFor="store">Store Name</Label>
+                  <Input id="store" type="text" onChange={handleStore} defaultValue={reciept.store} />
+                  </div>
+                
+                <div className="grid gap-3">
+                  <Label htmlFor="address">Store Address</Label>
+                  <Input type="text" id="address" onChange={handleAddress} defaultValue={reciept.address} />
+                </div>
+                  
+                <div className="grid gap-3">
+                  <Label htmlFor="time">Store Address</Label>
+                  <Input type="date" id="time" onChange={handleTransactionTime} />
+                </div>
+                  
+                </CardContent>
+                <CardFooter className="flex-col gap-2">
                 <Button onClick={submitReciept}>Submit Completed Form</Button>
                 </CardFooter>
               </Card>
             </div>
           </div>
-          <div >
+          <div>
           {selectedImage && (
                 <Image width={500} height={500}
                   src={URL.createObjectURL(selectedImage)}   
@@ -151,11 +166,8 @@ export default function InputFile(this: any) {
                 />
               )}
           </div>
-          <div className="bg-muted/50 aspect-video rounded-xl">
-            {showResults && (
-              <>
-                <Input type="text" onChange={handleStore} defaultValue={reciept.store} />
-                <Input type="text" onChange={handleAddress} defaultValue={reciept.address}/>
+        </div>
+        <div className="bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min">
                 <Table>
                   <TableHeader>
                     <TableRow>
@@ -168,11 +180,11 @@ export default function InputFile(this: any) {
                     {reciept.items.map((item, index) => (
                       <TableRow key={index}>
                         <TableCell className="font-medium">
-                          <Input type="text" onChange={() => handleItem(event, index)} defaultValue={item.name}/>
+                          <Input type="text" onChange={(event) => handleItem(event,index)} defaultValue={item.name}/>
 
                         </TableCell>
                         <TableCell className="font-medium">
-                        <Input type="number" defaultValue={item.cost}/>
+                        <Input type="text" onChange={(event) => handleCost(event,index)} defaultValue={item.name}/>
                         </TableCell>
 
                       </TableRow>
@@ -181,17 +193,15 @@ export default function InputFile(this: any) {
                   </TableBody>
                   <TableFooter>
                     <TableRow>
-                      <TableCell colSpan={3}>Total</TableCell>
-                      <TableCell className="text-right">{reciept.total}</TableCell>
+                      <TableCell colSpan={2}>Total</TableCell>
+                    <TableCell className="text-right"><Input type="number" onChange={handleTotal} defaultValue={reciept.total} />
+                  </TableCell>
                     </TableRow>
                   </TableFooter>
                 </Table>
-                <Button onClick={submitReciept}>Submit Completed Form</Button></>
-            )}
-              {/* <p id="p1"></p> */}
-
-          </div>
+                
         </div>
+
       </div>
     </SidebarInset>
   </SidebarProvider>
