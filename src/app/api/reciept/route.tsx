@@ -1,13 +1,13 @@
 'use server'
 import { NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
+import { ObjectId } from "mongodb";
 
 export interface Item {
   name: string;
   cost: number;
 }
 export interface Reciept {
-  _id: string;
   store: string,
   address: string,
   items: Array<Item>,
@@ -17,16 +17,14 @@ export interface Reciept {
   transaction_date: Date,
 }
 
-
-// interface MoviesProps {
-//   movies: Reciept[];
-// }
-
-
+// probably should look into using serverside props so i dont have to manually convert strings back into Dates
 export async function POST(req: Request) {
   
   try {
-    const formData = await req.json();
+    let formData: Reciept = await req.json();
+    formData.transaction_date = new Date(formData.transaction_date);
+    formData.created = new Date(formData.created);
+    formData.updated = new Date(formData.updated);
     // console.log(formData.get("result"))
     // const tell: Reciept = formData.get("result");
     const client = await clientPromise;

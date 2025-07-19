@@ -1,6 +1,6 @@
 
 import mongoclient from "../../lib/mongodb";
-
+import { Reciept } from "../api/reciept/route";
 export const dynamic = "force-dynamic"; 
 export const fetchCache = 'force-no-store';
 
@@ -41,7 +41,7 @@ const ListAll = async () => {
                            <TableRow key={movie.created}>
                                <TableCell className="font-medium">{movie.store}</TableCell>
                            <TableCell>{movie.items.length}</TableCell>
-                           <TableCell>{movie.transaction_date}</TableCell>
+                           {/* <TableCell>{movie.transaction_date}</TableCell> */}
                            <TableCell className="text-right">{movie.total}</TableCell>
                            </TableRow>
                        )}

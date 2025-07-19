@@ -12,12 +12,20 @@ import {
 } from "@/components/ui/card"
 
 export async function SectionCards() {
-    // const client = await mongoclient;
-    //    const db = client.db("groclog");
-    //    const movies = await db
-    //        .collection("reciepts").
-    //        .find({})
-    //        .toArray();
+    const client = await mongoclient;
+       const db = client.db("groclog");
+       const movies = await db
+           .collection("reciepts")
+           .aggregate([ { 
+            $group: { 
+                _id: null, 
+                total: { 
+                    $sum: "$total" 
+                } 
+            } 
+           }]);
+    console.log("--------------");
+    console.log(movies);
     return (
       <>
      <Card className="@container/card">

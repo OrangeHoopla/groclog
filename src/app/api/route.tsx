@@ -3,9 +3,9 @@ import { NextResponse } from "next/server";
 // const uri = process.env.BACKEND_URI;
 
 export async function POST(req: Request) {
+  const uri = process.env.BACKEND_URI!;
     try {
     const formData = await req.formData();
-    const uri = process.env.BACKEND_URI!;
     const example = await fetch(uri + "/api/upload", {
             method: "post",
             body: formData,
