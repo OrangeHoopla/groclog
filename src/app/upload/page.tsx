@@ -18,7 +18,7 @@ export const dynamic = "force-dynamic";
 export const fetchCache = 'force-no-store';
 
 
-let reciept: Reciept = ({"items": [],"store": "", "address":"","total":0,"created":new Date(),"updated":new Date(),"transaction_date":new Date(),"_id": ""});
+let reciept: Reciept = ({"items": [],"store": "", "address":"","total":0,"created":new Date(),"updated":new Date(),"transaction_date": new Date(),"_id": ""});
 export default function InputFile() {
   // var reciept = ({} as any) as Reciept;
   const fileInput = useRef<HTMLInputElement>(null);
@@ -184,7 +184,7 @@ export default function InputFile() {
 
                         </TableCell>
                         <TableCell className="font-medium">
-                        <Input type="text" onChange={(event) => handleCost(event,index)} defaultValue={item.name}/>
+                        <Input type="text" onChange={(event) => handleCost(event,index)} defaultValue={item.cost}/>
                         </TableCell>
 
                       </TableRow>
