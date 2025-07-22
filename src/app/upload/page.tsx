@@ -1,6 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useState } from "react";
 import Image from 'next/image'
 
@@ -26,6 +26,7 @@ export default function InputFile() {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [Items, setItems] = useState(Array<Item>);
 
+
   const handleAddress = (event: { target: { value: string; }; }) => {
     reciept.address = event.target.value;
   };
@@ -36,7 +37,7 @@ export default function InputFile() {
 
   const handleTotal = (event: { target: { value: string } }) => {
     reciept.total = Number(event.target.value);
-    console.log(reciept);
+    // console.log(reciept);
   };
 
   const handleItem = (event: { target: { value: string } }, index: number) => {
@@ -52,12 +53,11 @@ export default function InputFile() {
     item.cost = Number(event.target.value);
     const temp = [...Items];
     temp.splice(index, 1, item);
-    setItems(temp);
+    setItems(Items => Items.slice(0,index-1).concat(Items.slice(index+1,Items.length)));
   };
 
   const handleTransactionTime = (event: { target: { value: string; }; }) => {
     reciept.transaction_date = new Date(event.target.value);
-    console.log(reciept);
   };
 
   async function addItem() {
@@ -68,16 +68,16 @@ export default function InputFile() {
   }
 
   const deleteItem = (index: number) => {
-    console.log(index);
-    const temp = [...Items];
-    temp.splice(index, 1);
-
-    // updating the list
-    setItems(temp);
+    const newArray = [
+      ...Items.slice(0, index), // Elements before the one to delete
+      ...Items.slice(index + 1) // Elements after the one to delete
+    ];
+    setItems(newArray);
   }
 
-  
-
+  useEffect(() => {
+    console.log(Items);
+  }, [Items]);
   
   async function uploadFile(
     evt: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -94,12 +94,9 @@ export default function InputFile() {
         reciept = data.response;
         setItems(data.response.items);
         console.log(reciept);
-        
-        
       });
   });
     router.refresh();
-
   }
 
    function submitReciept() {
@@ -208,13 +205,13 @@ export default function InputFile() {
                     {Items.map((item, index) => (
                       <TableRow key={index}>
                         <TableCell className="font-medium">
-                          <Input type="text" onChange={(event) => handleItem(event,index)} defaultValue={item.name}/>
+                          <Input type="text" onChange={(event) => handleItem(event,index)} value={item.name}/>
 
                         </TableCell>
                         <TableCell className="font-medium">
-                        <Input type="text" onChange={(event) => handleCost(event,index)} defaultValue={item.cost}/>
+                        <Input type="text" onChange={(event) => handleCost(event,index)} value={item.cost}/>
                         </TableCell>
-                        <TableCell><Button onClick={() => deleteItem(index) } variant="ghost"><svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  strokeWidth="2"  strokeLinecap="round"  strokeLinejoin="round"  className="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg></Button></TableCell>
+                        <TableCell><Button onClick={() => deleteItem(index)} variant="ghost"><svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  strokeWidth="2"  strokeLinecap="round"  strokeLinejoin="round"  className="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg></Button></TableCell>
                       </TableRow>
                     ))}
                   
