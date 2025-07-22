@@ -12,7 +12,7 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
-import { Reciept } from "../api/reciept/route";
+import { Item, Reciept } from "../api/reciept/route";
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 export const dynamic = "force-dynamic"; 
 export const fetchCache = 'force-no-store';
@@ -24,6 +24,7 @@ export default function InputFile() {
   const fileInput = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [Items, setItems] = useState(Array<Item>);
 
   const handleAddress = (event: { target: { value: string; }; }) => {
     reciept.address = event.target.value;
@@ -39,17 +40,41 @@ export default function InputFile() {
   };
 
   const handleItem = (event: { target: { value: string } }, index: number) => {
-    reciept.items[index].name = event.target.value;
+    const item: Item = Items.at(index)!
+    item.name = event.target.value;
+    const temp = [...Items];
+    temp.splice(index, 1, item);
+    setItems(temp);
   };
 
   const handleCost = (event: { target: { value: string } }, index: number) => {
-    reciept.items[index].cost = Number(event.target.value);
+    const item: Item = Items.at(index)!
+    item.cost = Number(event.target.value);
+    const temp = [...Items];
+    temp.splice(index, 1, item);
+    setItems(temp);
   };
 
   const handleTransactionTime = (event: { target: { value: string; }; }) => {
     reciept.transaction_date = new Date(event.target.value);
     console.log(reciept);
   };
+
+  async function addItem() {
+    setItems([
+      ...Items,
+      { name: "", cost: 0 }
+    ]);
+  }
+
+  const deleteItem = (index: number) => {
+    console.log(index);
+    const temp = [...Items];
+    temp.splice(index, 1);
+
+    // updating the list
+    setItems(temp);
+  }
 
   
 
@@ -67,6 +92,7 @@ export default function InputFile() {
       
       response.json().then((data) => {
         reciept = data.response;
+        setItems(data.response.items);
         console.log(reciept);
         
         
@@ -76,8 +102,9 @@ export default function InputFile() {
 
   }
 
-  async function submitReciept() {
-    await fetch("/api/reciept/", { method: "POST", body: JSON.stringify(reciept) })
+   function submitReciept() {
+    reciept.items = Items;
+    fetch("/api/reciept/", { method: "POST", body: JSON.stringify(reciept)})
     
   }
 
@@ -86,6 +113,7 @@ export default function InputFile() {
       setSelectedImage(evt.target.files[0]); //error
     }
   };
+
 
 
   return (<SidebarProvider>
@@ -177,7 +205,7 @@ export default function InputFile() {
                   </TableHeader>
                   <TableBody>
                     
-                    {reciept.items.map((item, index) => (
+                    {Items.map((item, index) => (
                       <TableRow key={index}>
                         <TableCell className="font-medium">
                           <Input type="text" onChange={(event) => handleItem(event,index)} defaultValue={item.name}/>
@@ -186,19 +214,20 @@ export default function InputFile() {
                         <TableCell className="font-medium">
                         <Input type="text" onChange={(event) => handleCost(event,index)} defaultValue={item.cost}/>
                         </TableCell>
-
+                        <TableCell><Button onClick={() => deleteItem(index) } variant="ghost"><svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  strokeWidth="2"  strokeLinecap="round"  strokeLinejoin="round"  className="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg></Button></TableCell>
                       </TableRow>
                     ))}
-                   
+                  
                   </TableBody>
                   <TableFooter>
                     <TableRow>
                       <TableCell colSpan={2}>Total</TableCell>
                     <TableCell className="text-right"><Input type="number" onChange={handleTotal} defaultValue={reciept.total} />
                   </TableCell>
-                    </TableRow>
+              </TableRow>
                   </TableFooter>
-                </Table>
+          </Table>
+          <Button onClick={addItem}>Add Entry</Button>
                 
         </div>
 

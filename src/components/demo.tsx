@@ -1,6 +1,5 @@
 
 import mongoclient from "../../lib/mongodb";
-import { Reciept } from "../api/reciept/route";
 export const dynamic = "force-dynamic"; 
 export const fetchCache = 'force-no-store';
 
