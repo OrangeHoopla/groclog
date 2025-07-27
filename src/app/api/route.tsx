@@ -15,7 +15,12 @@ export async function POST(req: Request) {
             } else {
               return res.text().then((ressy) => {
                 return fetch(uri + "/api/submit/" + ressy, {
-                  method: "post"
+                  method: "post",
+                  headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "StoreProcessor": "WholeFoods :)",
+                    "ImageProcessor": "Generic"
+                 }
                 }).then((res) => {
                   if(!res.ok) {
                     return "Fail";

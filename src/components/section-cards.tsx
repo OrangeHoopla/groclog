@@ -14,6 +14,8 @@ import {
 
 
 export async function SectionCards() {
+
+  //sum of all expenses
     const client = await mongoclient;
        const db = client.db("groclog");
        const movies = await db
@@ -26,6 +28,7 @@ export async function SectionCards() {
                 } 
             } 
            }]).toArray();
+  
     console.log(movies[0].total);
     return (
       <>

@@ -74,10 +74,6 @@ export default function InputFile() {
     ];
     setItems(newArray);
   }
-
-  useEffect(() => {
-    console.log(Items);
-  }, [Items]);
   
   async function uploadFile(
     evt: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -202,7 +198,7 @@ export default function InputFile() {
                   </TableHeader>
                   <TableBody>
                     
-                    {Items.map((item, index) => (
+                    { Items && Items.map((item, index) => (
                       <TableRow key={index}>
                         <TableCell className="font-medium">
                           <Input type="text" onChange={(event) => handleItem(event,index)} value={item.name}/>
