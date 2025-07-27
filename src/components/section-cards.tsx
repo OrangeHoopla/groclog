@@ -1,4 +1,5 @@
 
+'use server'
 import mongoclient from "../../lib/mongodb";
 
 import { Badge } from "@/components/ui/badge"
@@ -10,6 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+
 
 export async function SectionCards() {
     const client = await mongoclient;
@@ -23,20 +25,18 @@ export async function SectionCards() {
                     $sum: "$total" 
                 } 
             } 
-           }]);
-    console.log("--------------");
-    console.log(movies);
+           }]).toArray();
+    console.log(movies[0].total);
     return (
       <>
      <Card className="@container/card">
         <CardHeader>
           <CardDescription>Total Revenue</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            $1,250.00
+              ${movies[0].total }
           </CardTitle>
           <CardAction>
             <Badge variant="outline">
-              
               +12.5%
             </Badge>
           </CardAction>
