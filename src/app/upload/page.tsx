@@ -5,6 +5,7 @@ import { useState } from "react";
 import Image from 'next/image'
 
 import { Input } from "@/components/ui/input"
+import { uploadFile } from "@/components/backend/upload"
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
@@ -75,7 +76,7 @@ export default function InputFile() {
     setItems(newArray);
   }
   
-  async function uploadFile(
+  async function saveFile(
     evt: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) {
     evt.preventDefault();
@@ -84,15 +85,19 @@ export default function InputFile() {
     const res = hmm?.[0] || null
     formdata.append("file", res!);
 
-    await fetch("/api/", { method: "POST", body: formdata }).then((response) => {
+    let test = await uploadFile(formdata).then((data) => {
+      // let mar = await data.json();
+      // let mar: JSON = await data.json();
+      // mar
+      // setItems(reciept.items);
+      return data.json();
       
-      response.json().then((data) => {
-        reciept = data.response;
-        setItems(data.response.items);
-        console.log(reciept);
-      });
-  });
+    });
+    reciept = test.response;
+    setItems(test.response.items)
+    console.log(test.response);
     router.refresh();
+
   }
 
    function submitReciept() {
@@ -152,7 +157,7 @@ export default function InputFile() {
                   </form>
                 </CardContent>
                 <CardFooter className="flex-col gap-2">
-                <Button onClick={uploadFile}>Upload Image</Button>
+                <Button onClick={saveFile}>Upload Image</Button>
                 </CardFooter>
               </Card>
               <Card className="w-full max-w-sm">
