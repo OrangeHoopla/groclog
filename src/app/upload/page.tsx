@@ -1,6 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { useState } from "react";
 import Image from 'next/image'
 
@@ -85,7 +85,7 @@ export default function InputFile() {
     const res = hmm?.[0] || null
     formdata.append("file", res!);
 
-    let test = await uploadFile(formdata).then((data) => {
+    const test = await uploadFile(formdata).then((data) => {
       // let mar = await data.json();
       // let mar: JSON = await data.json();
       // mar

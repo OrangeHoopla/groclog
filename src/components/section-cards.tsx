@@ -29,14 +29,26 @@ export async function SectionCards() {
             } 
            }]).toArray();
   
-    console.log(movies[0].total);
+        const itemCount = await db
+           .collection("reciepts")
+           .aggregate([ { 
+            $group: { 
+                _id: null, 
+                total: { 
+                    $sum: { $size:"$items" }
+                } 
+            } 
+           }]).toArray();
+  
+  // console.log(movies[0].total);
+  // console.log(itemCount)
     return (
       <>
      <Card className="@container/card">
         <CardHeader>
           <CardDescription>Total Revenue</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-              ${movies[0].total }
+              ${ movies[0].total }
           </CardTitle>
           <CardAction>
             <Badge variant="outline">
@@ -55,9 +67,9 @@ export async function SectionCards() {
       </Card>
       <Card className="@container/card">
         <CardHeader>
-          <CardDescription>New Customers</CardDescription>
+          <CardDescription>Total Items</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            1,234
+            { itemCount[0].total }
           </CardTitle>
           <CardAction>
             <Badge variant="outline">

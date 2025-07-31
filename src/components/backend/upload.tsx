@@ -2,7 +2,8 @@ import { NextResponse } from "next/server";
 
 
 export async function uploadFile(req: FormData) {
-    const uri = process.env.BACKEND_URI!;
+  const uri = process.env.BACKEND_URI!;
+  console.log(uri);
         try {
         // const formData = await req.f;
         const example = await fetch("http://localhost:8000" + "/api/upload", {
