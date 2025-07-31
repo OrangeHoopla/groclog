@@ -84,8 +84,9 @@ export default function InputFile() {
     const hmm = fileInput.current?.files || null
     const res = hmm?.[0] || null
     formdata.append("file", res!);
+    const uri = process.env.BACKEND_URI!;
 
-    const test = await uploadFile(formdata).then((data) => {
+    const test = await uploadFile(formdata,uri).then((data) => {
       // let mar = await data.json();
       // let mar: JSON = await data.json();
       // mar

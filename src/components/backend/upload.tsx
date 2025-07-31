@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
 
 
-export async function uploadFile(req: FormData) {
-  const uri = process.env.BACKEND_URI!;
+export async function uploadFile(req: FormData, uri: string) {
+  // const uri = process.env.BACKEND_URI!;
   console.log(uri);
         try {
         // const formData = await req.f;
-        const example = await fetch("http://localhost:8000" + "/api/upload", {
+        const example = await fetch(uri + "/api/upload", {
                 method: "post",
                 body: req,
               }).then((res) => {
@@ -14,7 +14,7 @@ export async function uploadFile(req: FormData) {
                   return "Fail";
                 } else {
                   return res.text().then((ressy) => {
-                    return fetch("http://localhost:8000" + "/api/submit/" + ressy, {
+                    return fetch(uri + "/api/submit/" + ressy, {
                       method: "post",
                       headers: {
                         "Content-Type": "application/x-www-form-urlencoded",
