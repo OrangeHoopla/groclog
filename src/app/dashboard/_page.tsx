@@ -29,18 +29,10 @@ import {
 export default function Page() {
   const [date, setDate] = React.useState<Date>()
 
-  async function uploadFile() {
-    console.log(date);
-
-    console.log("-------------------");
-    const demo = new Date("2025-07-13T03:00:17.120939Z");
-    setDate(demo);
-
-  }
 
   return (
     <SidebarProvider>
-      <AppSidebar active={"Dashboard"} />
+      <AppSidebar />
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
           <SidebarTrigger className="-ml-1" />

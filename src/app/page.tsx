@@ -1,17 +1,3 @@
-import { AppSidebar } from "@/components/app-sidebar"
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"
-import { Separator } from "@/components/ui/separator"
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar"
 import ListAll from "@/components/demo"
 import { SectionCards } from "@/components/section-cards"
 import { Metadata } from "next"
@@ -23,9 +9,11 @@ export const metadata: Metadata = {
 }
 
 
+
 export default function Page() {
   return (
 
+    <div>
       <div className="flex flex-1 flex-col gap-4 p-4">
         <div className="grid auto-rows-min gap-4 md:grid-cols-3">
             <SectionCards/>
@@ -34,6 +22,7 @@ export default function Page() {
           <ListAll/>   
         </div>
       </div>
+    </div>
 
   )
 }

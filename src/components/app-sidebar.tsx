@@ -5,6 +5,7 @@ import * as React from "react"
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -14,6 +15,8 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu"
+import { ChevronUp } from "lucide-react"
 
 // This is sample data.
 const data = {
@@ -47,9 +50,9 @@ const data = {
   ],
 }
 
-export function AppSidebar(props: { active: string } ) {
+export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
-    <Sidebar>
+    <Sidebar { ...props }>
       <SidebarHeader>
         {/* <VersionSwitcher
           versions={data.versions}
@@ -66,7 +69,7 @@ export function AppSidebar(props: { active: string } ) {
               <SidebarMenu>
                 {item.items.map((item) => (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild isActive={item.title === props.active}>
+                    <SidebarMenuButton asChild isActive={item.isActive}>
                       <a href={item.url}>{item.title}</a>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -77,6 +80,33 @@ export function AppSidebar(props: { active: string } ) {
         ))}
       </SidebarContent>
       <SidebarRail />
+
+      <SidebarFooter>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <SidebarMenuButton>
+                     Username
+                    <ChevronUp className="ml-auto" />
+                  </SidebarMenuButton>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  side="top"
+                  className="w-[--radix-popper-anchor-width]"
+                >
+                  <DropdownMenuItem>
+                    <span>Account</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <span>Sign out</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarFooter>
+      
     </Sidebar>
   )
 }
