@@ -13,7 +13,7 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
-import { Item, Reciept } from "../api/reciept/route";
+import { Item, Reciept } from "@/lib/ORM";
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 export const dynamic = "force-dynamic"; 
 export const fetchCache = 'force-no-store';
@@ -21,7 +21,8 @@ export const fetchCache = 'force-no-store';
 
 let reciept: Reciept = ({"items": [],"store": "", "address":"","total":0,"created":new Date(),"updated":new Date(),"transaction_date": new Date()});
 export default function InputFile() {
-  // var reciept = ({} as any) as Reciept;
+
+  // General state variables
   const fileInput = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
@@ -38,7 +39,6 @@ export default function InputFile() {
 
   const handleTotal = (event: { target: { value: string } }) => {
     reciept.total = Number(event.target.value);
-    // console.log(reciept);
   };
 
   const handleItem = (event: { target: { value: string } }, index: number) => {
@@ -63,8 +63,8 @@ export default function InputFile() {
 
   async function addItem() {
     setItems([
-      ...Items,
-      { name: "", cost: 0 }
+      { name: "", cost: 0 },
+      ...Items
     ]);
   }
 
@@ -87,16 +87,13 @@ export default function InputFile() {
     const uri = process.env.BACKEND_URI!;
 
     const test = await uploadFile(formdata,uri).then((data) => {
-      // let mar = await data.json();
-      // let mar: JSON = await data.json();
-      // mar
-      // setItems(reciept.items);
+
       return data.json();
       
     });
     reciept = test.response;
     setItems(test.response.items)
-    console.log(test.response);
+    console.log(test.response); // nice to see if error occurs
     router.refresh();
 
   }
@@ -115,29 +112,8 @@ export default function InputFile() {
 
 
 
-  return (<SidebarProvider>
-    <AppSidebar active={"Upload"}/>
-    <SidebarInset>
-      <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
-        <SidebarTrigger className="-ml-1" />
-        <Separator
-          orientation="vertical"
-          className="mr-2 data-[orientation=vertical]:h-4"
-        />
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem className="hidden md:block">
-              <BreadcrumbLink href="/">
-                GrocLog
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator className="hidden md:block" />
-            <BreadcrumbItem>
-              <BreadcrumbPage>Upload</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
-      </header>
+  return (
+
       <div className="flex flex-1 flex-col gap-4 p-4">
         <div className="grid auto-rows-min gap-4 md:grid-cols-3">
           <div className="bg-muted/50 aspect-video rounded-xl">
@@ -195,6 +171,7 @@ export default function InputFile() {
           </div>
         </div>
         <div className="bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min">
+        <Button onClick={addItem}>Add Entry</Button>
                 <Table>
                   <TableHeader>
                     <TableRow>
@@ -225,14 +202,8 @@ export default function InputFile() {
                   </TableCell>
               </TableRow>
                   </TableFooter>
-          </Table>
-          <Button onClick={addItem}>Add Entry</Button>
-                
+          </Table> 
         </div>
-
       </div>
-    </SidebarInset>
-  </SidebarProvider>
-  
   )
 }
