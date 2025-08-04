@@ -23,6 +23,7 @@ export default function InputFile() {
   const router = useRouter();
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [Items, setItems] = useState(Array<Item>);
+  
 
 
   const handleAddress = (event: { target: { value: string; }; }) => {
@@ -107,12 +108,10 @@ export default function InputFile() {
   };
 
 
-
   return (
-
       <div className="flex flex-1 flex-col gap-4 p-4">
         <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-          <div className="bg-muted/50 aspect-video rounded-xl">
+          <div className="aspect-video rounded-xl">
             <div className="grid w-full max-w-sm items-center gap-3">
             <Card className="w-full max-w-sm">
                 <CardContent>
