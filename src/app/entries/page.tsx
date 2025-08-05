@@ -1,5 +1,6 @@
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import mongoclient from "@/lib/mongodb";
+import Link from "next/link";
 
 export default async function Entries() {
 
@@ -25,15 +26,16 @@ export default async function Entries() {
                  </TableHeader>
                     <TableBody>
                         
-                        {movies.map(movie =>
+                        {movies.map((item, index) =>
                             
-                            
-                            <TableRow key={movie.created} data-href={"/entries/" + movie._id}>
-                                <TableCell className="font-medium">{movie.store}</TableCell>
-                            <TableCell>{movie.items.length}</TableCell>
-                            <TableCell>{movie.transaction_date.toString()}</TableCell>
-                            <TableCell className="text-right">{movie.total}</TableCell>
+                            <Link key={index} href={"/entries/" + item._id}>
+                            <TableRow key={index} >
+                                <TableCell className="font-medium">{item.store}</TableCell>
+                            <TableCell>{item.items.length}</TableCell>
+                            <TableCell>{item.transaction_date.toString()}</TableCell>
+                            <TableCell className="text-right">{item.total}</TableCell>
                                 </TableRow>
+                            </Link>
                             
                         )}
                  </TableBody>

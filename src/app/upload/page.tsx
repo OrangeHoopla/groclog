@@ -95,7 +95,7 @@ export default function InputFile() {
 
   }
 
-   function submitReciept() {
+   function submitReciept() { //TODO Fix this
     reciept.items = Items;
     fetch("/api/reciept/", { method: "POST", body: JSON.stringify(reciept)})
     
