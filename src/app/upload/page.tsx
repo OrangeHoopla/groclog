@@ -123,7 +123,10 @@ export default function InputFile() {
                           type="file"
                           ref={fileInput}
                           onChange={handleImageUpload}
-                        />
+                      />
+                      <div>
+                        store option
+                      </div>
                       </div>
                     </div>
                   </form>
