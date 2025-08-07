@@ -1,5 +1,6 @@
+import { Reciept } from "@/lib/ORM";
 import { NextResponse } from "next/server";
-
+import mongoclient from "@/lib/mongodb";
 
 export async function uploadFile(req: FormData, uri: string) {
   // const uri = process.env.BACKEND_URI!;
@@ -45,4 +46,15 @@ export async function uploadFile(req: FormData, uri: string) {
         return NextResponse.json({ response: "fail", error: e });
         }
     
-  }
+}
+  
+export async function uploadRecieptForm(req: Reciept) {
+
+  const client = await mongoclient;
+  const db = client.db("groclog");
+  const result = await db
+    .collection("reciepts")
+    .insertOne(req);
+  return result;
+
+}

@@ -5,7 +5,7 @@ import { useState } from "react";
 import Image from 'next/image'
 
 import { Input } from "@/components/ui/input"
-import { uploadFile } from "@/components/backend/upload"
+import { uploadFile, uploadRecieptForm } from "@/components/backend/upload"
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
@@ -23,6 +23,7 @@ export default function InputFile() {
   const router = useRouter();
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [Items, setItems] = useState(Array<Item>);
+  const [Processor, SetProcessor] = useState<string>("WholeFoods");
   
 
 
@@ -95,9 +96,10 @@ export default function InputFile() {
 
   }
 
-   function submitReciept() { //TODO Fix this
-    reciept.items = Items;
-    fetch("/api/reciept/", { method: "POST", body: JSON.stringify(reciept)})
+   function submitReciept() { //TODO test later
+     reciept.items = Items;
+
+    uploadRecieptForm(reciept);
     
   }
 
