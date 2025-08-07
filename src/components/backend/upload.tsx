@@ -1,3 +1,4 @@
+'use server'
 import { Reciept } from "@/lib/ORM";
 import { NextResponse } from "next/server";
 import mongoclient from "@/lib/mongodb";
