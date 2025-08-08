@@ -11,6 +11,8 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Item, Reciept } from "@/lib/ORM";
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import SelectStore from "@/components/SelectStore";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 export const dynamic = "force-dynamic"; 
 export const fetchCache = 'force-no-store';
 
@@ -24,9 +26,14 @@ export default function InputFile() {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [Items, setItems] = useState(Array<Item>);
   const [Processor, SetProcessor] = useState<string>("WholeFoods");
+  const proc = useRef<String>("Test");
   
 
 
+  const handleProcessor = (event: string) => {
+    SetProcessor(event);
+    console.log(Processor);
+  }
   const handleAddress = (event: { target: { value: string; }; }) => {
     reciept.address = event.target.value;
   };
@@ -127,7 +134,21 @@ export default function InputFile() {
                           onChange={handleImageUpload}
                       />
                       <div>
-                        store option
+                      <Select onValueChange={handleProcessor}>
+                        <SelectTrigger className="w-[180px]">
+                          <SelectValue placeholder="Select a Store" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectGroup>
+                            <SelectLabel>Stores</SelectLabel>
+                            <SelectItem value="Whole Foods">Whole Foods</SelectItem>
+                            <SelectItem value="Aldi">Aldi</SelectItem>
+                            <SelectItem value="Giant">Giant</SelectItem>
+                            <SelectItem value="Publix">Publix</SelectItem>
+                            <SelectItem value="Costco">Costco</SelectItem>
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
                       </div>
                       </div>
                     </div>
