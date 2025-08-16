@@ -3,7 +3,7 @@ import { Reciept } from "@/lib/ORM";
 import { NextResponse } from "next/server";
 import mongoclient from "@/lib/mongodb";
 
-export async function uploadFile(req: FormData, uri: string) {
+export async function uploadFile(req: FormData, uri: string, store_processor: string) {
   // const uri = process.env.BACKEND_URI!;
   console.log(uri);
         try {
@@ -20,7 +20,7 @@ export async function uploadFile(req: FormData, uri: string) {
                       method: "post",
                       headers: {
                         "Content-Type": "application/x-www-form-urlencoded",
-                        "StoreProcessor": "WholeFoods :(",
+                        "StoreProcessor": store_processor,
                         "ImageProcessor": "Generic"
                      }
                     }).then((res) => {
@@ -48,7 +48,8 @@ export async function uploadFile(req: FormData, uri: string) {
         }
     
 }
-  
+ 
+'use server'
 export async function uploadRecieptForm(req: Reciept) {
 
   const client = await mongoclient;

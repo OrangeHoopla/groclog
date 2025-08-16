@@ -17,6 +17,8 @@ import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMe
 export const dynamic = "force-dynamic"; 
 export const fetchCache = 'force-no-store';
 
+//bugs
+// cant type in fractions deletes entry if tried
 
 let reciept: Reciept = ({"items": [],"store": "", "address":"","total":0,"created":new Date(),"updated":new Date(),"transaction_date": new Date()});
 export default function InputFile() {
@@ -90,7 +92,7 @@ export default function InputFile() {
     formdata.append("file", res!);
     const uri = process.env.BACKEND_URI!;
 
-    const test = await uploadFile(formdata,uri).then((data) => {
+    const test = await uploadFile(formdata,uri,Processor).then((data) => {
 
       return data.json();
       
@@ -104,8 +106,9 @@ export default function InputFile() {
 
    function submitReciept() { //TODO test later
      reciept.items = Items;
+     const data = JSON.parse(JSON.stringify(reciept))
 
-    uploadRecieptForm(reciept);
+    uploadRecieptForm((data));
     
   }
 
