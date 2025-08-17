@@ -16,11 +16,12 @@ import React from "react";
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 export const dynamic = "force-dynamic"; 
 export const fetchCache = 'force-no-store';
+import { ObjectId } from 'bson';
 
 //bugs
 // cant type in fractions deletes entry if tried
 
-let reciept: Reciept = ({"items": [],"store": "", "address":"","total":0,"created":new Date(),"updated":new Date(),"transaction_date": new Date()});
+let reciept: Reciept = ({"_id": new ObjectId(),"items": [],"store": "", "address":"","total":0,"created":new Date(),"updated":new Date(),"transaction_date": new Date()});
 export default function InputFile() {
 
   // General state variables
@@ -106,6 +107,7 @@ export default function InputFile() {
 
    function submitReciept() { //TODO test later
      reciept.items = Items;
+     reciept._id = new ObjectId();
      const data = JSON.parse(JSON.stringify(reciept))
 
     uploadRecieptForm((data));

@@ -49,7 +49,6 @@ export async function uploadFile(req: FormData, uri: string, store_processor: st
     
 }
  
-'use server'
 export async function uploadRecieptForm(req: Reciept) {
 
   const client = await mongoclient;

@@ -1,54 +1,56 @@
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+
+import { GetServerSideProps } from "next";
 import mongoclient from "@/lib/mongodb";
-import Link from "next/link";
+import { Reciept } from "@/lib/ORM";
+import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { use } from "react";
+import { redirect } from "next/navigation";
+import { getallItems } from "@/components/backend/items";
+import WOW from "@/components/backend/sample";
 
-export default async function Entries() {
+const client = await mongoclient;
+const db = client.db("groclog");
+const aaa = await db
+        .collection("reciepts")
+        .find({})
+        .toArray();
+            
+export default function Entries(input: Array<Reciept>) {
+    
+    // let sample = use(getallItems());
 
-    try {
-        const client = await mongoclient;
-        const db = client.db("groclog");
-        const movies = await db
-            .collection("reciepts")
-            .find({})
-            .toArray();
-        console.log(movies);
+    
+
+    const handleClick = (input: string) => {
+            redirect('/');
+          };
+
         return (
             <>  
-                <Table>
-                 <TableCaption>Grocery Store Entries</TableCaption>
-                 <TableHeader>
-                     <TableRow>
-                     <TableHead className="w-[100px]">Store</TableHead>
-                     <TableHead>Items</TableHead>
-                     <TableHead>Time</TableHead>
-                     <TableHead className="text-right">Amount</TableHead>
-                     </TableRow>
-                 </TableHeader>
-                    <TableBody>
-                        
-                        {movies.map((item, index) =>
-                            
-                            <Link key={index} href={"/entries/" + item._id}>
-                            <TableRow key={index} >
-                                <TableCell className="font-medium">{item.store}</TableCell>
-                            <TableCell>{item.items.length}</TableCell>
-                            <TableCell>{item.transaction_date.toString()}</TableCell>
-                            <TableCell className="text-right">{item.total}</TableCell>
-                                </TableRow>
-                            </Link>
-                            
-                        )}
-                 </TableBody>
-                 </Table>
+                <WOW test = {JSON.stringify(aaa) }/>
+
              </>
         );
  
-    } catch (e) {
-        console.error(e);
-        return (
-            <>
-                <h1>Loading</h1>
-            </>
-        );
-    }
 }
+
+// export async function recieve() {
+//     try {
+//         const client = await mongoclient;
+//         const db = client.db("groclog");
+//         const movies = await db
+//                 .collection("reciepts")
+//                 .find({})
+//                 .toArray();
+//         return {
+//             props: { movies: JSON.parse(JSON.stringify(movies)) },
+//         };
+//     } catch (e) {
+ 
+//         console.error(e);
+ 
+//         return { props: { movies: JSON } };
+ 
+//     }
+ 
+//  };

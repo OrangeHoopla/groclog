@@ -1,8 +1,11 @@
+import { ObjectId } from "bson";
+
 export interface Item {
     name: string;
     cost: number;
   }
-  export interface Reciept {
+export interface Reciept {
+    _id: ObjectId,
     store: string,
     address: string,
     items: Array<Item>,
