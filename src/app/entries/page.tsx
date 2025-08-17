@@ -1,11 +1,5 @@
 
-import { GetServerSideProps } from "next";
 import mongoclient from "@/lib/mongodb";
-import { Reciept } from "@/lib/ORM";
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { use } from "react";
-import { redirect } from "next/navigation";
-import { getallItems } from "@/components/backend/items";
 import WOW from "@/components/backend/sample";
 
 const client = await mongoclient;
@@ -15,15 +9,10 @@ const aaa = await db
         .find({})
         .toArray();
             
-export default function Entries(input: Array<Reciept>) {
+export default function Entries() {
     
     // let sample = use(getallItems());
 
-    
-
-    const handleClick = (input: string) => {
-            redirect('/');
-          };
 
         return (
             <>  

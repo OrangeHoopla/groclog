@@ -15,7 +15,7 @@ export default function WOW(aaa: { test: string }) {
         router.push("/entries/" + input.toString());
       };
 
-    let hmm: Array<Reciept> = JSON.parse(aaa.test);
+    const hmm: Array<Reciept> = JSON.parse(aaa.test);
 
     
         return (
