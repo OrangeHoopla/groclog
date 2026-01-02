@@ -25,6 +25,12 @@ const data = {
   // versions: ["1.0.1", "1.1.0-alpha", "2.0.0-beta1"],
   navMain: [
     {
+      title: "Home",
+      url: "/",
+      items: [
+      ],
+    },
+    {
       title: "Image Processing",
       url: "#",
       items: [
@@ -47,6 +53,14 @@ const data = {
           url: "#",
           isActive: true,
         },
+        {
+          title: "Categories",
+          url: "#",
+        },
+        {
+          title: "Items",
+          url: "#",
+        },
       ],
     },
   ],
@@ -67,7 +81,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         {/* We create a SidebarGroup for each parent. */}
         {data.navMain.map((item) => (
           <SidebarGroup key={item.title}>
-            <SidebarGroupLabel>{item.title}</SidebarGroupLabel>
+            <Link href={item.url}><SidebarGroupLabel>{item.title}</SidebarGroupLabel></Link>
             <SidebarGroupContent>
               <SidebarMenu>
                 {item.items.map((item) => (

@@ -1,10 +1,10 @@
-import type { NextConfig } from "next";
+import type {NextConfig} from 'next';
 
 const nextConfig: NextConfig = {
   exports: {
     experimental: {
       serverActions: {
-        bodySizeLimit: '5mb',
+        bodySizeLimit: '50mb',
       },
     },
   }
@@ -12,9 +12,12 @@ const nextConfig: NextConfig = {
 };
 
 module.exports = {
-  experimental: {
-    serverActions: {
-      bodySizeLimit: '5mb',
+  env : {
+    BACKEND_URI : process.env.BACKEND_URI,
+  },
+  experimental : {
+    serverActions : {
+      bodySizeLimit : '50mb',
     },
   },
 }

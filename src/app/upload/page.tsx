@@ -57,11 +57,14 @@ export default function InputFile() {
   };
 
   const handleCost = (event: { target: { value: string } }, index: number) => {
-    const item: Item = Items.at(index)!
-    item.cost = Number(event.target.value);
-    const temp = [...Items];
-    temp.splice(index, 1, item);
-    setItems(Items => Items.slice(0,index-1).concat(Items.slice(index+1,Items.length)));
+    const nextItems = Items.map((item, indexM) => {
+      if (indexM == index) {
+        item.cost = Number(event.target.value);
+        return item
+      }
+      return item
+    });
+    setItems(nextItems);
   };
 
   const handleTransactionTime = (event: { target: { value: string; }; }) => {
@@ -86,6 +89,7 @@ export default function InputFile() {
   async function saveFile(
     evt: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) {
+
     evt.preventDefault();
     const formdata = new FormData();
     const hmm = fileInput.current?.files || null
@@ -93,14 +97,16 @@ export default function InputFile() {
     formdata.append("file", res!);
     const uri = process.env.BACKEND_URI!;
 
-    const test = await uploadFile(formdata,uri,Processor).then((data) => {
+    const test = await uploadFile(formdata,uri).then((data) => {
 
-      return data.json();
+      console.log(data.items)
+      return data;
       
     });
-    reciept = test.response;
-    setItems(test.response.items)
-    console.log(test.response); // nice to see if error occurs
+    // reciept = test.response;
+    setItems(test.items)
+    reciept.store = test.location;
+    reciept.total = test.total;
     router.refresh();
 
   }
@@ -222,7 +228,6 @@ export default function InputFile() {
                       <TableRow key={index}>
                         <TableCell className="font-medium">
                           <Input type="text" onChange={(event) => handleItem(event,index)} value={item.name}/>
-
                         </TableCell>
                         <TableCell className="font-medium">
                         <Input type="text" onChange={(event) => handleCost(event,index)} value={item.cost}/>
