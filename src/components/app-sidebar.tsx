@@ -26,7 +26,7 @@ const data = {
   navMain: [
     {
       title: "Home",
-      url: "/",
+      url: "/core",
       items: [
       ],
     },
@@ -36,7 +36,7 @@ const data = {
       items: [
         {
           title: "Upload",
-          url: "/upload",
+          url: "/core/upload",
         },
       ],
     },
@@ -46,7 +46,7 @@ const data = {
       items: [
         {
           title: "Entries",
-          url: "/entries",
+          url: "/core/entries",
         },
         {
           title: "Metrics",
