@@ -1,7 +1,10 @@
+
 import { AppSidebar } from "@/components/app-sidebar";
 import ListAll from "@/components/demo"
 import { SectionCards } from "@/components/section-cards"
 import { auth0 } from "@/lib/auth0";
+import { ComponentType } from "react";
+
 
 
 export default auth0.withPageAuthRequired(async function Page() {
@@ -26,8 +29,6 @@ export default auth0.withPageAuthRequired(async function Page() {
     </div>
 
   )
-},{
-  returnTo: '/core'
-});
+}) as ComponentType<any>;
 
 
