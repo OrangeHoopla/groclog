@@ -1,48 +1,31 @@
-import { Background } from "@/components/background";
 import { FAQ } from "@/components/blocks/faq";
-import { Features } from "@/components/blocks/features";
-import { Hero } from "@/components/blocks/hero";
-import { Logos } from "@/components/blocks/logos";
-import { Pricing } from "@/components/blocks/pricing";
-import { ResourceAllocation } from "@/components/blocks/resource-allocation";
-import { Testimonials } from "@/components/blocks/testimonials";
 import { Metadata } from "next"
-import LoginButton from "@/components/LoginButton";
-import LogoutButton from "@/components/LogoutButton";
-import { Navbar } from "@/components/blocks/navbar";
-import { ThemeProvider } from "@/components/theme-provider";
-
+import { FeatureSection } from "@/components/land/feature-section";
+import { HeroSection } from "@/components/land/hero-section";
+import { LogoCloud } from "@/components/land/logo-cloud";
+import { CTA } from "@/components/land/cta";
+import { PricingSection } from "@/components/land/pricing";
+import { SocialProof } from "@/components/land/social-proof";
+//https://github.com/shadcnblocks/mainline-nextjs-template/blob/master/public/hero.webp reference
 export const metadata: Metadata = {
   title: 'GrocLog',
   description: '...',
 }
 
-export default function Home() {
+function LandingPage() {
   return (
     <>
-      <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          enableSystem
-          disableTransitionOnChange
-        >
-      <Background className="via-muted to-muted/80">
-        <Navbar />
-        <Hero />
-        {/* <Logos /> */}
-        <Features />
-        <ResourceAllocation />
-      </Background>
-      <Testimonials />
-      <Background variant="bottom">
-        <Pricing />
-        <FAQ />
-      </Background>
-      </ThemeProvider>
+      <HeroSection />
+      <LogoCloud />
+      <FeatureSection />
+      <SocialProof />
+      <CTA />
+      <FAQ />
+      <PricingSection />
     </>
-  );
+  )
 }
-
+export default LandingPage
 
 
 // export default function Page() {
