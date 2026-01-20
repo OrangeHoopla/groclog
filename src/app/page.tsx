@@ -6,7 +6,7 @@ import { LogoCloud } from "@/components/land/logo-cloud";
 import { CTA } from "@/components/land/cta";
 import { PricingSection } from "@/components/land/pricing";
 import { SocialProof } from "@/components/land/social-proof";
-//https://github.com/shadcnblocks/mainline-nextjs-template/blob/master/public/hero.webp reference
+//https://github.com/ObservedObserver/convertfast-ui reference
 export const metadata: Metadata = {
   title: 'GrocLog',
   description: '...',
