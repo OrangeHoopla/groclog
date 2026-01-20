@@ -1,5 +1,5 @@
 
-import mongoclient from "../../lib/mongodb";
+import mongodbclient from "@/lib/mongodb";
 export const dynamic = "force-dynamic"; 
 export const fetchCache = 'force-no-store';
 
@@ -15,7 +15,7 @@ import {
 
 const ListAll = async () => {
    try {
-       const client = await mongoclient;
+       const client = await mongodbclient;
        const db = client.db("groclog");
        const movies = await db
            .collection("reciepts")

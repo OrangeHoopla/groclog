@@ -1,6 +1,6 @@
 
 'use server'
-import mongoclient from "../../lib/mongodb";
+import mongodbclient from "@/lib/mongodb";
 
 import { Badge } from "@/components/ui/badge"
 import {
@@ -16,7 +16,7 @@ import {
 export async function SectionCards() {
 
   //sum of all expenses
-    const client = await mongoclient;
+    const client = await mongodbclient;
        const db = client.db("groclog");
        const movies = await db
            .collection("reciepts")
