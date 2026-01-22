@@ -12,14 +12,23 @@ import {
     TableHeader,
     TableRow,
   } from "@/components/ui/table"
+import { auth0 } from "@/lib/auth0";
 
 const ListAll = async () => {
-   try {
+    try {
+       const session = await auth0.getSession();
+         const user = session?.user;
        const client = await mongodbclient;
        const db = client.db("groclog");
        const movies = await db
            .collection("reciepts")
-           .find({})
+           .aggregate([
+               {
+                    $match: {
+                        "sub": user?.sub
+                            },              
+                }
+           ])
            .limit(20)
            .toArray();
 
@@ -36,7 +45,7 @@ const ListAll = async () => {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                       {movies.map(movie =>
+                       {movies?.map(movie =>
                            <TableRow key={movie.created}>
                                <TableCell className="font-medium">{movie.store}</TableCell>
                            <TableCell>{movie.items.length}</TableCell>
