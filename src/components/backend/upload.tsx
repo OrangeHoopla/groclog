@@ -1,5 +1,6 @@
 'use server'
 import { Reciept } from "@/lib/ORM";
+import { auth0 } from "@/lib/auth0";
 import mongoclient from "@/lib/mongodb";
 
 export async function uploadFile(req: FormData, uri: string) {
@@ -38,6 +39,9 @@ export async function uploadFile(req: FormData, uri: string) {
 
  
 export async function uploadRecieptForm(req: Reciept) {
+  const session = await auth0.getSession();
+  const user = session?.user;
+  req.sub = user?.sub!;
 
   const client = await mongoclient;
   const db = client.db("groclog");

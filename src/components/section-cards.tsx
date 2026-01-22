@@ -11,34 +11,52 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { auth0 } from "@/lib/auth0";
 
 
 export async function SectionCards() {
+  const session = await auth0.getSession();
+  const user = session?.user;
 
   //sum of all expenses
-    const client = await mongodbclient;
-       const db = client.db("groclog");
-       const movies = await db
-           .collection("reciepts")
-           .aggregate([ { 
-            $group: { 
-                _id: null, 
-                total: { 
-                    $sum: "$total" 
-                } 
-            } 
-           }]).toArray();
+  const client = await mongodbclient;
+  const db = client.db("groclog");
+  const movies = await db
+    .collection("reciepts")
+
+    .aggregate([
+    {
+      $match: {
+        "sub": user?.sub
+      },              
+    },
+    {
+      $group: {
+        _id: null,
+        total: {
+          $sum: "$total"
+        }
+      } 
+    }
+    ]).toArray();
   
-        const itemCount = await db
-           .collection("reciepts")
-           .aggregate([ { 
-            $group: { 
-                _id: null, 
-                total: { 
-                    $sum: { $size:"$items" }
-                } 
+  const itemCount = await db
+      .collection("reciepts")
+    .aggregate([
+      {
+        $match: {
+          "sub": user?.sub
+        },              
+      },
+      { 
+        $group: { 
+            _id: null, 
+            total: { 
+                $sum: { $size:"$items" }
             } 
-           }]).toArray();
+        } 
+      }
+    ]).toArray();
   
   // console.log(movies[0].total);
   // console.log(itemCount)
@@ -46,7 +64,7 @@ export async function SectionCards() {
       <>
      <Card className="@container/card">
         <CardHeader>
-          <CardDescription>Total Revenue</CardDescription>
+          <CardDescription>Total Cost</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
               ${ movies[0].total }
           </CardTitle>

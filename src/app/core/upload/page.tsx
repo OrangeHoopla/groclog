@@ -17,12 +17,13 @@ import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMe
 export const dynamic = "force-dynamic"; 
 export const fetchCache = 'force-no-store';
 import { ObjectId } from 'bson';
+import { auth0 } from "@/lib/auth0";
 
 //bugs
 // cant type in fractions deletes entry if tried
 
-let reciept: Reciept = ({"_id": new ObjectId(),"items": [],"store": "", "address":"","total":0,"created":new Date(),"updated":new Date(),"transaction_date": new Date()});
-export default function InputFile() {
+let reciept: Reciept = ({"_id": new ObjectId(),"items": [],"store": "", "address":"","total":0,"created":new Date(),"updated":new Date(),"transaction_date": new Date(),"sub":""});
+export default function Page() {
 
   // General state variables
   const fileInput = useRef<HTMLInputElement>(null);
