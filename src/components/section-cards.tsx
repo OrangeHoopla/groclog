@@ -23,7 +23,6 @@ export async function SectionCards() {
   const db = client.db("groclog");
   const movies = await db
     .collection("reciepts")
-
     .aggregate([
     {
       $match: {
@@ -41,12 +40,12 @@ export async function SectionCards() {
     ]).toArray();
   
   const itemCount = await db
-      .collection("reciepts")
+    .collection("reciepts")
     .aggregate([
       {
         $match: {
           "sub": user?.sub
-        },              
+        }              
       },
       { 
         $group: { 
@@ -58,13 +57,26 @@ export async function SectionCards() {
       }
     ]).toArray();
   
+  const storeVisits = await db
+    .collection("reciepts")
+    .aggregate([
+      {
+        $match: {
+          "sub": user?.sub
+        }
+      },
+      {
+        $count: "tots"
+      }
+    ]).toArray();
+  
   // console.log(movies[0].total);
   // console.log(itemCount)
     return (
       <>
      <Card className="@container/card">
         <CardHeader>
-          <CardDescription>Total Cost</CardDescription>
+          <CardDescription>Total Cost this Month</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
               ${ movies[0].total }
           </CardTitle>
@@ -79,13 +91,13 @@ export async function SectionCards() {
             Trending up this month 
           </div>
           <div className="text-muted-foreground">
-            Visitors for the last 6 months
+            X Visits to the store this month
           </div>
         </CardFooter>
       </Card>
       <Card className="@container/card">
         <CardHeader>
-          <CardDescription>Total Items</CardDescription>
+          <CardDescription>Total Items this Month</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
             { itemCount[0].total }
           </CardTitle>
@@ -101,28 +113,27 @@ export async function SectionCards() {
             Down 20% this period 
           </div>
           <div className="text-muted-foreground">
-            Acquisition needs attention
+            lower than year average
           </div>
         </CardFooter>
       </Card>
       <Card className="@container/card">
         <CardHeader>
-          <CardDescription>Active Accounts</CardDescription>
+          <CardDescription>Number of Store Visits</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            45,678
+            { storeVisits[0].tots }
           </CardTitle>
           <CardAction>
             <Badge variant="outline">
-              
               +12.5%
             </Badge>
           </CardAction>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
           <div className="line-clamp-1 flex gap-2 font-medium">
-            Strong user retention 
+            Trending Up
           </div>
-          <div className="text-muted-foreground">Engagement exceed targets</div>
+          <div className="text-muted-foreground">Above set ideal</div>
         </CardFooter>
             </Card>
             </>
