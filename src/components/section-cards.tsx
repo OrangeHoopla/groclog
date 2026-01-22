@@ -78,7 +78,7 @@ export async function SectionCards() {
         <CardHeader>
           <CardDescription>Total Cost this Month</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-              ${ movies[0].total }
+              ${ movies[0]?.total }
           </CardTitle>
           <CardAction>
             <Badge variant="outline">
@@ -99,7 +99,7 @@ export async function SectionCards() {
         <CardHeader>
           <CardDescription>Total Items this Month</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            { itemCount[0].total }
+            { itemCount[0]?.total }
           </CardTitle>
           <CardAction>
             <Badge variant="outline">
@@ -121,7 +121,7 @@ export async function SectionCards() {
         <CardHeader>
           <CardDescription>Number of Store Visits</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            { storeVisits[0].tots }
+            { storeVisits[0]?.tots }
           </CardTitle>
           <CardAction>
             <Badge variant="outline">
