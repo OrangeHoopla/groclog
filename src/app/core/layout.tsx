@@ -21,12 +21,12 @@ export const metadata: Metadata = {
   description: "Logging for grocery bills",
 };
 
-const session = await auth0.getSession();
-const user = session?.user;
+
 
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode; }>) {
-
+const session = await auth0.getSession();
+const user = session?.user;
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
